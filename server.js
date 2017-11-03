@@ -31,14 +31,13 @@ wss.on('connection', (socket) => {
 
   socket.on('message', (message) => {
     const newMessage = JSON.parse(message);
-    console.log(`User ${newMessage.username} said ${newMessage.content}`);
-    newMessage.id = uuidv4();
-    // if (newMessage.type === "postNotification"){
-    //   newMessage.type = "incomingNotification";
-    // } 
-    // if(newMessage.type === "postMessage"){
-    //   newMessage.type = "incomingMessage";
-    // } 
+    if (newMessage.type === "postMessage" ) {
+      console.log(`User ${newMessage.username} said ${newMessage.content}`);
+      newMessage.type = "incomingMessage";
+      newMessage.id = uuidv4();
+    } else if (newMessage.type === "postNotification") {
+      newMessage.type = "incomingNotification";
+    }
     broadcast(JSON.stringify(newMessage));
   })
 
