@@ -33,7 +33,12 @@ wss.on('connection', (socket) => {
     const newMessage = JSON.parse(message);
     console.log(`User ${newMessage.username} said ${newMessage.content}`);
     newMessage.id = uuidv4();
-    newMessagr.type= 'incomingMessage';
+    // if (newMessage.type === "postNotification"){
+    //   newMessage.type = "incomingNotification";
+    // } 
+    // if(newMessage.type === "postMessage"){
+    //   newMessage.type = "incomingMessage";
+    // } 
     broadcast(JSON.stringify(newMessage));
   })
 
