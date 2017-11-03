@@ -22,6 +22,7 @@ function broadcast(data) {
     }
   });
 }
+const checkImage = /^https?:\/\/.+\.(jpg|jpeg|png|gif)$/i;
 
 let connectCounter = 0;
 // Set up a callback that will run when a client connects to the server
@@ -38,8 +39,12 @@ wss.on('connection', (socket) => {
     const newMessage = JSON.parse(message);
     if (newMessage.type === "postMessage" ) {
       console.log(`User ${newMessage.username} said ${newMessage.content}`);
-      newMessage.type = "incomingMessage";
       newMessage.id = uuidv4();
+      if (checkImage.test(newMessage.content)) {
+        newMessage.type = "imageMessage";
+      } else {
+        newMessage.type = "incomingMessage";
+      }
     } else if (newMessage.type === "postNotification") {
       newMessage.type = "incomingNotification";
     }
